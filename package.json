@@ -8,7 +8,8 @@
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "validate:translations": "node scripts/validateTranslations.js"
   },
   "dependencies": {
     "@apollo/client": "^3.11.2",
@@ -18,14 +19,17 @@
     "@remix-run/serve": "^2.10.3",
     "@tailwindcss/typography": "^0.5.13",
     "graphql": "^16.9.0",
+    "i18next": "^23.12.2",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^15.0.0",
     "stats.js": "^0.17.0",
     "three": "^0.167.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.10.3",
+    "@types/i18n": "^0.13.12",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@types/three": "^0.167.1",

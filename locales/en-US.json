@@ -1,0 +1,36 @@
+{
+    "animalGenerator": {
+      "traits": "Traits",
+      "color": "Color",
+      "horns": "Horns",
+      "eyes": "Eyes",
+      "legs": "Legs",
+      "wings": "Wings",
+      "tail": "Tail",
+      "snout": "Snout",
+      "generate": "Generate Animal",
+      "hornsOptions": {
+        "none": "None",
+        "unicorn": "Unicorn",
+        "goat": "Goat",
+        "devil": "Devil"
+      },
+      "eyesOptions": {
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      },
+      "legsOptions": {
+        "short": "Short",
+        "medium": "Medium",
+        "long": "Long"
+      },
+      "snoutOptions": {
+        "none": "None",
+        "crocodile": "Crocodile",
+        "dog": "Dog",
+        "pig": "Pig"
+      }
+    }
+  }
+  
