@@ -8,7 +8,6 @@
       "wings": "Wings",
       "tail": "Tail",
       "snout": "Snout",
-      "generate": "Generate Animal",
       "hornsOptions": {
         "none": "None",
         "unicorn": "Unicorn",

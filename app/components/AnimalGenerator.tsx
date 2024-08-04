@@ -209,12 +209,6 @@ const AnimalGenerator: React.FC = () => {
             </label>
           </div>
           <div>
-            <button
-              onClick={() => console.log(traits)}
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full"
-            >
-              {t('animalGenerator.generate')}
-            </button>
             <button onClick={handleExport} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-full mt-4">
               Export as GLB
             </button>
