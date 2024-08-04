@@ -19,8 +19,6 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ modelUrl }) => {
         0.01,
         50000
       );
-      camera.position.set(20, 20, 20);
-      camera.lookAt(new THREE.Vector3(0, 0, 0));
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
@@ -36,10 +34,23 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ modelUrl }) => {
         modelUrl,
         (gltf) => {
           const obj = gltf.scene;
-          obj.position.set(0, 0, 0);
-          obj.receiveShadow = true;
-          obj.castShadow = true;
           scene.add(obj);
+
+          const box = new THREE.Box3().setFromObject(obj);
+          const size = box.getSize(new THREE.Vector3());
+          const center = box.getCenter(new THREE.Vector3());
+
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const fov = camera.fov * (Math.PI / 180);
+          let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+          
+          cameraZ *= 1.5;
+          
+          camera.position.set(center.x, center.y, cameraZ);
+          camera.lookAt(center);
+
+          controls.target.set(center.x, center.y, center.z);
+          controls.update();
 
           function animate() {
             requestAnimationFrame(animate);
@@ -53,10 +64,31 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ modelUrl }) => {
           console.error('An error happened:', error);
         }
       );
+
+      return () => {
+        if (containerRef.current) {
+          containerRef.current.removeChild(renderer.domElement);
+        }
+        controls.dispose();
+        renderer.dispose();
+
+        scene.traverse((object) => {
+          if (object instanceof THREE.Mesh) {
+            if (object.geometry) object.geometry.dispose();
+            if (object.material) {
+              if (Array.isArray(object.material)) {
+                object.material.forEach((material) => material.dispose());
+              } else {
+                object.material.dispose();
+              }
+            }
+          }
+        });
+      };
     }
   }, [modelUrl]);
 
-  return <div ref={containerRef} style={{ width: '100%', height: '100vh' }} />;
+  return <div ref={containerRef} style={{ width: '100%', height: '500px' }} />;
 };
 
 export default ModelViewer;

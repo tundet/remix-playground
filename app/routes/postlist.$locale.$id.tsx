@@ -50,28 +50,34 @@ function PostDetails() {
 
 
     return (
-        <div className="container">
+        <div>
             <NavBar locale={locale} />
-            <main className="container mx-auto px-4">
-                <h1 className="title">{title}</h1>
-                <div
-                    className="content"
-                    dangerouslySetInnerHTML={{ __html: sanitizedContentText }}
-                />
+            <main className="container mx-auto px-8 py-8 lg:py-12 flex flex-col lg:flex-row lg:space-x-8 border border-gray-200 shadow-lg rounded-lg bg-white">
+                {/* Content and file download section */}
+                <div className="flex-1 space-y-8">
+                    <h1 className="title text-4xl font-extrabold mb-6 text-gray-900 border-b border-gray-300 pb-4">
+                        {title}
+                    </h1>
+                    <div
+                        className="content text-gray-700"
+                        dangerouslySetInnerHTML={{ __html: sanitizedContentText }}
+                    />
+                    {glb && (
+                        <div className="mt-8 p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50">
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-2">File</h2>
+                            <a
+                                href={glb.url}
+                                download={glb.fileName}
+                                className="text-blue-600 hover:underline"
+                            >
+                                Download {glb.fileName}
+                            </a>
+                        </div>
+                    )}
+                </div>
                 {glb && (
-                    <ModelViewer modelUrl={glb.url} />
-                )}
-
-                {glb && (
-                    <div className="mt-8">
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-2">File</h2>
-                        <a
-                            href={glb.url}
-                            download={glb.fileName}
-                            className="text-blue-600 hover:underline"
-                        >
-                            Download {glb.fileName}
-                        </a>
+                    <div className="w-full lg:w-1/3 mt-8 lg:mt-0 p-4 border border-gray-200 shadow-md rounded-lg bg-white">
+                        <ModelViewer modelUrl={glb.url} />
                     </div>
                 )}
             </main>

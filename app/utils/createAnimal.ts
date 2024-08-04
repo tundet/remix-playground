@@ -22,7 +22,7 @@ export function createAnimal(scene: THREE.Scene, traits: AnimalTraits): THREE.Gr
     animal.add(head);
 
     // Eyes
-    const eyeSize = eyes === 1 ? 0.1 : eyes === 2 ? 0.15 : 0.2; // Sizes for eyes
+    const eyeSize = eyes === 1 ? 0.1 : eyes === 2 ? 0.15 : 0.2;
     const eyeGeometry = new THREE.SphereGeometry(eyeSize, 16, 16);
     const eyeMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
 

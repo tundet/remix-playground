@@ -68,29 +68,33 @@ const AnimalGenerator: React.FC = () => {
       const exporter = new GLTFExporter();
       exporter.parse(
         sceneRef.current,
-        (gltf) => {
-          const blob = new Blob([JSON.stringify(gltf)], { type: 'application/json' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          a.download = 'model.gltf';
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
+        (result) => {
+          if (result instanceof ArrayBuffer) {
+            const blob = new Blob([result], { type: 'model/gltf-binary' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'model.glb';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+          } else {
+            console.error('Error: Expected result to be an ArrayBuffer');
+          }
         },
-        function ( error ) {
-          console.log( 'An error happened during parsing', error );
-          },
+        (error) => {
+          console.error('An error happened during parsing', error);
+        },
         {
-          binary: false,
+          binary: true,
           trs: true,
           onlyVisible: true,
           truncateDrawRange: true,
           embedImages: true,
           animations: [],
           forceIndices: true,
-          // forcePowerOfTwoTextures: true,
+          //forcePowerOfTwoTextures: true,
         }
       );
     }

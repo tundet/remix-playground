@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 .container {
-    @apply max-w-screen-xl;
+    @apply w-full;
 }
 
 .title {
     @apply text-4xl font-extrabold mb-6 text-gray-900;
+}
+
+.content {
+    @apply mx-auto p-4;
 }

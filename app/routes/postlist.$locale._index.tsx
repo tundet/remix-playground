@@ -41,7 +41,7 @@ function PostList() {
     const { postCollection: { items }, locale } = useLoaderData<PostCollectionData>();
 
     return (
-        <div className="container">
+        <div>
             <NavBar locale={locale} />
             <main className="container mx-auto px-4">
                 <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-12">

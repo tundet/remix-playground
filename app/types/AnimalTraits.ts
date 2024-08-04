@@ -1,9 +1,9 @@
 export interface AnimalTraits {
     color: string;
-    horns: number; // Represents the type of horn
-    eyes: number;  // Represents the size of eyes
-    legs: number;  // Represents the length of legs
+    horns: number;
+    eyes: number;
+    legs: number;
     wings: number;
-    tail: number;  // Represents the type of tail
+    tail: number; 
     snout: number;
 }
