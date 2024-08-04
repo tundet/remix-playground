@@ -37,7 +37,7 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: app.zip
-          destination: gs://${{ secrets.GOOGLE_CLOUD_BUCKET }}/app.zip
+          destination: ${{ secrets.GOOGLE_CLOUD_BUCKET }}/app.zip
 
       - name: Deploy to Google App Engine
         run: gcloud app deploy --quiet
