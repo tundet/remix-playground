@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      VITE_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      VITE_CONTENT_URL: ${{ secrets.CONTENT_URL }}
 
     steps:
       - name: Checkout code
@@ -43,5 +46,3 @@ jobs:
         run: gcloud app deploy --quiet
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud.json
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          CONTENT_URL: ${{ secrets.CONTENT_URL }}
