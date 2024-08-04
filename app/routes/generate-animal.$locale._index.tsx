@@ -20,12 +20,18 @@ export default function GenerateAnimal() {
 
   return (
     <I18nextProvider i18n={i18n}>
-      <div>
+      <div className="h-screen bg-gradient-to-t from-yellow to-green">
         <NavBar locale={locale} />
-        <div className="container mx-auto py-6">
-          <div className="prose lg:prose-l mx-auto p-4">
-            <h1>{t('generate')}</h1>
-            <AnimalGenerator />
+        <div className="px-6 py-6">
+          <div className="flex flex-col h-full">
+            <div className="prose lg:prose-l mx-auto py-6">
+              <h1 className="text-yellow">{t('generate')}</h1>
+            </div>
+            <div className="flex-1 flex items-center justify-center">
+              <div className="w-full max-w-screen-xl h-full bg-gray-200 border-l border-gray-300">
+                <AnimalGenerator />
+              </div>
+            </div>
           </div>
         </div>
       </div>

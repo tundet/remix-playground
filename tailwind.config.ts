@@ -6,7 +6,12 @@ export default {
     "./node_modules/@remix-run/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'yellow': '#eef2c0',
+        'green': '#34bab7'
+      },
+    },
   },
   plugins: [require('@tailwindcss/typography')],
 } satisfies Config;

@@ -131,7 +131,7 @@ const AnimalGenerator: React.FC = () => {
 
   return (
     <div className="flex">
-      <div className="w-2/5 bg-gray-100 p-6 border-r border-gray-300">
+      <div className="w-2/6 bg-gray-100 p-6 border-r border-gray-300">
         <h3 className="text-3xl font-bold mt-0 mb-6 text-center">{t('animalGenerator.traits')}</h3>
         <div className="space-y-2">
           <div className="block text-lg font-medium mb-2">
@@ -151,6 +151,26 @@ const AnimalGenerator: React.FC = () => {
                 <option value={1}>{t('animalGenerator.hornsOptions.unicorn')}</option>
                 <option value={2}>{t('animalGenerator.hornsOptions.goat')}</option>
                 <option value={3}>{t('animalGenerator.hornsOptions.devil')}</option>
+              </select>
+            </label>
+          </div>
+          <div>
+            <label className="block text-lg font-medium mb-2">
+              {t('animalGenerator.eyes')}:
+              <select name="eyes" value={traits.eyes} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
+                <option value={1}>{t('animalGenerator.eyesOptions.small')}</option>
+                <option value={2}>{t('animalGenerator.eyesOptions.medium')}</option>
+                <option value={3}>{t('animalGenerator.eyesOptions.large')}</option>
+              </select>
+            </label>
+          </div>
+          <div>
+            <label className="block text-lg font-medium mb-2">
+              {t('animalGenerator.legs')}:
+              <select name="legs" value={traits.legs} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
+                <option value={1}>{t('animalGenerator.legsOptions.short')}</option>
+                <option value={2}>{t('animalGenerator.legsOptions.medium')}</option>
+                <option value={3}>{t('animalGenerator.legsOptions.long')}</option>
               </select>
             </label>
           </div>
@@ -188,19 +208,16 @@ const AnimalGenerator: React.FC = () => {
             </label>
           </div>
           <div>
-            <button onClick={handleExport} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-full mt-4">
+            <button onClick={handleExport} className="bg-green text-white py-2 px-4 rounded hover:bg-green  w-full mt-4">
               {t('animalGenerator.export')}
             </button>
           </div>
         </div>
       </div>
-      <div className="w-5/6 p-6 bg-gray-50 flex items-center justify-center border-l border-gray-300">
-        <div className="w-full h-full">
-          <div
-            ref={containerRef}
-            className="w-full h-full"
-            style={{ minHeight: '0', height: '100%' }}
-          />
+      <div className="w-4/6 p-6 bg-gray-200 flex items-center justify-center border-l border-gray-300">
+        <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: 'url(/images/3407002.jpg)' }} ref={containerRef} />
+        <div className="absolute bottom-4 right-4 text-sm text-gray-500">
+          Background designed by <a href="https://www.freepik.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">Freepik</a>
         </div>
       </div>
     </div>
