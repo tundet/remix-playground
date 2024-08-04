@@ -27,13 +27,10 @@ jobs:
       - name: Zip project files
         run: zip -r app.zip .
 
-      - name: Decode Google Cloud key
-        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > ${{ github.workspace }}/gcloud.json
-
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ github.workspace }}/gcloud.json
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
 
       - name: Upload to Google Cloud Storage
