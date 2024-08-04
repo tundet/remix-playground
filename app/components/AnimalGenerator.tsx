@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AnimalTraits } from '~/types/AnimalTraits';
 import { createAnimal } from '~/utils/createAnimal';
-import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { useTranslation } from 'react-i18next';
 
 const AnimalGenerator: React.FC = () => {
@@ -79,6 +79,9 @@ const AnimalGenerator: React.FC = () => {
           a.click();
           window.URL.revokeObjectURL(url);
         },
+        function ( error ) {
+          console.log( 'An error happened during parsing', error );
+          },
         {
           binary: false,
           trs: true,
@@ -87,7 +90,7 @@ const AnimalGenerator: React.FC = () => {
           embedImages: true,
           animations: [],
           forceIndices: true,
-          forcePowerOfTwoTextures: true,
+          // forcePowerOfTwoTextures: true,
         }
       );
     }
