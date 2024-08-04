@@ -1,0 +1,61 @@
+name: Deploy to Google Cloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Archive build output
+        run: zip -r app.zip public build
+
+      - name: Upload to Google Cloud Storage
+        uses: google-github-actions/upload-cloud-storage@v0
+        with:
+          path: app.zip
+          destination: ${{ secrets.GOOGLE_CLOUD_BUCKET }}/app.zip
+          project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: terraform
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: terraform
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          TF_VAR_project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+          TF_VAR_region: europe-west3
+          TF_VAR_bucket_name: ${{ secrets.GOOGLE_CLOUD_BUCKET }}
