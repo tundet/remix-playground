@@ -6,16 +6,15 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: '20'
 
@@ -25,37 +24,26 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Archive build output
-        run: zip -r app.zip public build
+      - name: Zip project files
+        run: zip -r app.zip .
+
+      - name: Decode Google Cloud key
+        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > ${{ github.workspace }}/gcloud.json
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key_file: ${{ github.workspace }}/gcloud.json
+          export_default_credentials: true
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Upload to Google Cloud Storage
-        uses: google-github-actions/upload-cloud-storage@v0
+        uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: app.zip
-          destination: ${{ secrets.GOOGLE_CLOUD_BUCKET }}/app.zip
-          project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+          destination: gs://${{ secrets.GOOGLE_CLOUD_BUCKET }}/app.zip
 
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-
-      - name: Terraform Init
-        run: terraform init
-        working-directory: terraform
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-        working-directory: terraform
+      - name: Deploy to Google App Engine
+        run: gcloud app deploy --quiet
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          TF_VAR_project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
-          TF_VAR_region: europe-west3
-          TF_VAR_bucket_name: ${{ secrets.GOOGLE_CLOUD_BUCKET }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud.json
