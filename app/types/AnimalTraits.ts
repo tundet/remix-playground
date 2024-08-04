@@ -3,7 +3,7 @@ export interface AnimalTraits {
     horns: number;
     eyes: number;
     legs: number;
-    wings: number;
+    wings: boolean;
     tail: number; 
     snout: number;
 }
@@ -23,5 +23,6 @@ export enum HornType {
   export enum SnoutType {
     Crocodile = 1,
     Dog,
-    Pig
+    Pig,
+    Default
   }

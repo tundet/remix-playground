@@ -1,35 +1,36 @@
 {
-    "animalGenerator": {
-      "traits": "Ominaisuudet",
-      "color": "Väri",
-      "horns": "Sarvet",
-      "eyes": "Silmät",
-      "legs": "Jalat",
-      "wings": "Siivet",
-      "tail": "Häntä",
-      "snout": "Kuono",
-      "hornsOptions": {
-        "none": "Ei ole",
-        "unicorn": "Yksisarvinen",
-        "goat": "Vuohi",
-        "devil": "Paholainen"
-      },
-      "eyesOptions": {
-        "small": "Pieni",
-        "medium": "Keskikokoinen",
-        "large": "Suuri"
-      },
-      "legsOptions": {
-        "short": "Lyhyet",
-        "medium": "Keskipitkät",
-        "long": "Pitkät"
-      },
-      "snoutOptions": {
-        "none": "Ei ole",
-        "crocodile": "Krokotiili",
-        "dog": "Koira",
-        "pig": "Sika"
-      }
-    }
+  "generate": "Luo eläin",
+  "animalGenerator": {
+    "traits": "Ominaisuudet",
+    "color": "Väri",
+    "horns": "Sarvet",
+    "eyes": "Silmät",
+    "legs": "Jalat",
+    "wings": "Siivet",
+    "tail": "Häntä",
+    "snout": "Kuono",
+    "hornsOptions": {
+      "none": "Ei ole",
+      "unicorn": "Yksisarvinen",
+      "goat": "Vuohi",
+      "devil": "Paholainen"
+    },
+    "eyesOptions": {
+      "small": "Pieni",
+      "medium": "Keskikokoinen",
+      "large": "Suuri"
+    },
+    "legsOptions": {
+      "short": "Lyhyet",
+      "medium": "Keskipitkät",
+      "long": "Pitkät"
+    },
+    "snoutOptions": {
+      "default": "Perus",
+      "crocodile": "Krokotiili",
+      "dog": "Koira",
+      "pig": "Sika"
+    },
+    "export": "Lataa GLB"
   }
-  
+}

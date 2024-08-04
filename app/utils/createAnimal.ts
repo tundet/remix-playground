@@ -53,11 +53,11 @@ export function createAnimal(scene: THREE.Scene, traits: AnimalTraits): THREE.Gr
     }
 
     // Wings
-    if (wings > 0) {
+    if (wings) {
         const wingGeometry = new THREE.PlaneGeometry(1.5, 0.5);
         const wingMaterial = new THREE.MeshStandardMaterial({ color: animalColor });
 
-        for (let i = 0; i < wings; i++) {
+        for (let i = 0; i < 2; i++) {
             const wing = new THREE.Mesh(wingGeometry, wingMaterial);
             wing.position.set(0, 1, i % 2 === 0 ? 0.8 : -0.8);
             wing.rotation.z = Math.PI / 4;
@@ -84,35 +84,35 @@ const createHorns = (animal: THREE.Group, type: HornType, color: THREE.Color) =>
     let hornGeometry;
     switch (type) {
         case HornType.Unicorn: {
-          hornGeometry = new THREE.ConeGeometry(0.1, 1, 32);
-          const unicornHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-          unicornHorn.position.set(1.6, 1.6, 0);
-          animal.add(unicornHorn);
-          break;
+            hornGeometry = new THREE.ConeGeometry(0.1, 1, 32);
+            const unicornHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+            unicornHorn.position.set(1.6, 1.6, 0);
+            animal.add(unicornHorn);
+            break;
         }
         case HornType.Goat: {
-          hornGeometry = new THREE.TorusGeometry(0.1, 0.1, 16, 100, Math.PI);
-          const leftGoatHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-          leftGoatHorn.position.set(1.6, 1.4, 0.3);
-          animal.add(leftGoatHorn);
-          const rightGoatHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-          rightGoatHorn.position.set(1.6, 1.4, -0.3);
-          animal.add(rightGoatHorn);
-          break;
+            hornGeometry = new THREE.TorusGeometry(0.1, 0.1, 16, 100, Math.PI);
+            const leftGoatHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+            leftGoatHorn.position.set(1.6, 1.4, 0.3);
+            animal.add(leftGoatHorn);
+            const rightGoatHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+            rightGoatHorn.position.set(1.6, 1.4, -0.3);
+            animal.add(rightGoatHorn);
+            break;
         }
         case HornType.Devil: {
-          hornGeometry = new THREE.ConeGeometry(0.1, 0.2, 32);
-          const leftDevilHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-          leftDevilHorn.position.set(1.6, 1.5, 0.3);
-          animal.add(leftDevilHorn);
-          const rightDevilHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-          rightDevilHorn.position.set(1.6, 1.5, -0.3);
-          animal.add(rightDevilHorn);
-          break;
+            hornGeometry = new THREE.ConeGeometry(0.1, 0.2, 32);
+            const leftDevilHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+            leftDevilHorn.position.set(1.6, 1.5, 0.3);
+            animal.add(leftDevilHorn);
+            const rightDevilHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+            rightDevilHorn.position.set(1.6, 1.5, -0.3);
+            animal.add(rightDevilHorn);
+            break;
         }
         default:
-          break;
-      }      
+            break;
+    }
 };
 
 const createTail = (type: TailLength) => {

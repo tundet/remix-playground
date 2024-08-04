@@ -22,8 +22,8 @@ export default function GenerateAnimal() {
     <I18nextProvider i18n={i18n}>
       <div>
         <NavBar locale={locale} />
-        <div className="container mx-auto py-8">
-          <div className="prose lg:prose-xl mx-auto p-4">
+        <div className="container mx-auto py-6">
+          <div className="prose lg:prose-l mx-auto p-4">
             <h1>{t('generate')}</h1>
             <AnimalGenerator />
           </div>

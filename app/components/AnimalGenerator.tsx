@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { AnimalTraits } from '~/types/AnimalTraits';
+import { AnimalTraits, HornType, TailLength, SnoutType } from '~/types/AnimalTraits';
 import { createAnimal } from '~/utils/createAnimal';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { useTranslation } from 'react-i18next';
@@ -10,18 +10,17 @@ const AnimalGenerator: React.FC = () => {
   const { t } = useTranslation();
   const [traits, setTraits] = useState<AnimalTraits>({
     color: '#8B4513',
-    horns: 1,
+    horns: HornType.Unicorn,
     eyes: 1,
     legs: 1,
-    wings: 0,
-    tail: 1,
-    snout: 0,
+    wings: false,
+    tail: TailLength.Short,
+    snout: SnoutType.Default,
   });
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
 
   useEffect(() => {
-
     const container = containerRef.current;
     if (container) {
       const scene = new THREE.Scene();
@@ -32,7 +31,7 @@ const AnimalGenerator: React.FC = () => {
         0.1,
         1000
       );
-      camera.position.set(3, 3, 3);
+      camera.position.set(4, 3, 3);
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(container.clientWidth, container.clientHeight);
@@ -96,7 +95,6 @@ const AnimalGenerator: React.FC = () => {
           embedImages: true,
           animations: [],
           forceIndices: true,
-          //forcePowerOfTwoTextures: true,
         }
       );
     }
@@ -104,7 +102,14 @@ const AnimalGenerator: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    if (type === 'select-one') {
+
+    if (type === 'checkbox') {
+      const input = e.target as HTMLInputElement;
+      setTraits(prev => ({
+        ...prev,
+        [name]: input.checked,
+      }));
+    } else if (type === 'select-one') {
       setTraits(prev => ({
         ...prev,
         [name]: parseInt(value, 10),
@@ -118,28 +123,25 @@ const AnimalGenerator: React.FC = () => {
   };
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTraits(prev => ({
+    setTraits((prev) => ({
       ...prev,
       color: e.target.value,
     }));
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/4 bg-gray-100 p-6 border-r border-gray-300">
-        <h1 className="text-3xl font-bold mb-6 text-center">{t('animalGenerator.traits')}</h1>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-lg font-medium mb-2">
-              {t('animalGenerator.color')}:
-              <input
-                type="color"
-                name="color"
-                value={traits.color}
-                onChange={handleColorChange}
-                className="block mt-2 w-full border border-gray-300 rounded-md p-2"
-              />
-            </label>
+    <div className="flex">
+      <div className="w-2/5 bg-gray-100 p-6 border-r border-gray-300">
+        <h3 className="text-3xl font-bold mt-0 mb-6 text-center">{t('animalGenerator.traits')}</h3>
+        <div className="space-y-2">
+          <div className="block text-lg font-medium mb-2">
+            <input
+              type="color"
+              name="color"
+              value={traits.color}
+              onChange={handleColorChange}
+              className="block w-full h-12 border border-gray-300 rounded-md p-2 mt-2"
+            />
           </div>
           <div>
             <label className="block text-lg font-medium mb-2">
@@ -150,39 +152,6 @@ const AnimalGenerator: React.FC = () => {
                 <option value={2}>{t('animalGenerator.hornsOptions.goat')}</option>
                 <option value={3}>{t('animalGenerator.hornsOptions.devil')}</option>
               </select>
-            </label>
-          </div>
-          <div>
-            <label className="block text-lg font-medium mb-2">
-              {t('animalGenerator.eyes')}:
-              <select name="eyes" value={traits.eyes} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
-                <option value={1}>{t('animalGenerator.eyesOptions.small')}</option>
-                <option value={2}>{t('animalGenerator.eyesOptions.medium')}</option>
-                <option value={3}>{t('animalGenerator.eyesOptions.large')}</option>
-              </select>
-            </label>
-          </div>
-          <div>
-            <label className="block text-lg font-medium mb-2">
-              {t('animalGenerator.legs')}:
-              <select name="legs" value={traits.legs} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
-                <option value={1}>{t('animalGenerator.legsOptions.short')}</option>
-                <option value={2}>{t('animalGenerator.legsOptions.medium')}</option>
-                <option value={3}>{t('animalGenerator.legsOptions.long')}</option>
-              </select>
-            </label>
-          </div>
-          <div>
-            <label className="block text-lg font-medium mb-2">
-              {t('animalGenerator.wings')}:
-              <input
-                type="number"
-                name="wings"
-                value={traits.wings}
-                min="0"
-                onChange={handleChange}
-                className="block mt-2 w-full border border-gray-300 rounded-md p-2"
-              />
             </label>
           </div>
           <div>
@@ -199,7 +168,7 @@ const AnimalGenerator: React.FC = () => {
             <label className="block text-lg font-medium mb-2">
               {t('animalGenerator.snout')}:
               <select name="snout" value={traits.snout} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
-                <option value={0}>{t('animalGenerator.snoutOptions.none')}</option>
+                <option value={0}>{t('animalGenerator.snoutOptions.default')}</option>
                 <option value={1}>{t('animalGenerator.snoutOptions.crocodile')}</option>
                 <option value={2}>{t('animalGenerator.snoutOptions.dog')}</option>
                 <option value={3}>{t('animalGenerator.snoutOptions.pig')}</option>
@@ -207,18 +176,35 @@ const AnimalGenerator: React.FC = () => {
             </label>
           </div>
           <div>
+            <label className="flex mt-5 items-center text-lg font-medium mb-2">
+              <input
+                type="checkbox"
+                name="wings"
+                checked={traits.wings}
+                onChange={handleChange}
+                className="custom-checkbox mr-2"
+              />
+              {t('animalGenerator.wings')}
+            </label>
+          </div>
+          <div>
             <button onClick={handleExport} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-full mt-4">
-              Export as GLB
+              {t('animalGenerator.export')}
             </button>
           </div>
         </div>
       </div>
-      <div className="w-3/4 p-6 bg-gray-50 flex items-center justify-center border-l border-gray-300">
+      <div className="w-5/6 p-6 bg-gray-50 flex items-center justify-center border-l border-gray-300">
         <div className="w-full h-full">
-          <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+          <div
+            ref={containerRef}
+            className="w-full h-full"
+            style={{ minHeight: '0', height: '100%' }}
+          />
         </div>
       </div>
     </div>
+
   );
 };
 
