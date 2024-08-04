@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -30,11 +30,10 @@ jobs:
       - name: Decode Google Cloud key
         run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > ${{ github.workspace }}/gcloud.json
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          service_account_key_file: ${{ github.workspace }}/gcloud.json
-          export_default_credentials: true
+          credentials_json: ${{ github.workspace }}/gcloud.json
           project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
 
       - name: Upload to Google Cloud Storage
