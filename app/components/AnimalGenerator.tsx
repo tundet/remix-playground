@@ -21,20 +21,22 @@ const AnimalGenerator: React.FC = () => {
   const sceneRef = useRef<THREE.Scene | null>(null);
 
   useEffect(() => {
-    if (containerRef.current) {
+
+    const container = containerRef.current;
+    if (container) {
       const scene = new THREE.Scene();
       sceneRef.current = scene;
       const camera = new THREE.PerspectiveCamera(
         75,
-        containerRef.current.clientWidth / containerRef.current.clientHeight,
+        container.clientWidth / container.clientHeight,
         0.1,
         1000
       );
       camera.position.set(3, 3, 3);
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-      containerRef.current.appendChild(renderer.domElement);
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
 
       const ambientLight = new THREE.AmbientLight(0x404040);
       scene.add(ambientLight);
@@ -58,7 +60,7 @@ const AnimalGenerator: React.FC = () => {
       animate();
 
       return () => {
-        containerRef.current?.removeChild(renderer.domElement);
+        container?.removeChild(renderer.domElement);
       };
     }
   }, [traits]);
@@ -120,10 +122,6 @@ const AnimalGenerator: React.FC = () => {
       ...prev,
       color: e.target.value,
     }));
-  };
-
-  const handleGenerate = () => {
-    setTraits({ ...traits });
   };
 
   return (

@@ -53,7 +53,6 @@ function PostDetails() {
         <div>
             <NavBar locale={locale} />
             <main className="container mx-auto px-8 py-8 lg:py-12 flex flex-col lg:flex-row lg:space-x-8 border border-gray-200 shadow-lg rounded-lg bg-white">
-                {/* Content and file download section */}
                 <div className="flex-1 space-y-8">
                     <h1 className="title text-4xl font-extrabold mb-6 text-gray-900 border-b border-gray-300 pb-4">
                         {title}

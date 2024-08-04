@@ -11,18 +11,22 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ modelUrl }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (containerRef.current) {
+    const container = containerRef.current;
+
+    if (!container) return;
+
+    if (container) {
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(
         30,
-        containerRef.current.clientWidth / containerRef.current.clientHeight,
+        container.clientWidth / container.clientHeight,
         0.01,
         50000
       );
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-      containerRef.current.appendChild(renderer.domElement);
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
 
       const ambientLight = new THREE.AmbientLight(0xcccccc, 1);
       scene.add(ambientLight);
@@ -66,8 +70,8 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ modelUrl }) => {
       );
 
       return () => {
-        if (containerRef.current) {
-          containerRef.current.removeChild(renderer.domElement);
+        if (container) {
+          container.removeChild(renderer.domElement);
         }
         controls.dispose();
         renderer.dispose();

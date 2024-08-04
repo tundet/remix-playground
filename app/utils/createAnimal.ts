@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { AnimalTraits } from '~/types/AnimalTraits';
+import { AnimalTraits, HornType, SnoutType, TailLength } from '~/types/AnimalTraits';
 
 export function createAnimal(scene: THREE.Scene, traits: AnimalTraits): THREE.Group {
     const animal = new THREE.Group();
@@ -79,49 +79,52 @@ export function createAnimal(scene: THREE.Scene, traits: AnimalTraits): THREE.Gr
     return animal;
 }
 
-const createHorns = (animal: THREE.Group, type: number, color: THREE.Color) => {
+const createHorns = (animal: THREE.Group, type: HornType, color: THREE.Color) => {
     const hornMaterial = new THREE.MeshStandardMaterial({ color });
     let hornGeometry;
     switch (type) {
-        case 1: // Unicorn Horn
-            hornGeometry = new THREE.ConeGeometry(0.1, 1, 32);
-            const unicornHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-            unicornHorn.position.set(1.6, 1.6, 0);
-            animal.add(unicornHorn);
-            break;
-        case 2: // Goat Horn
-            hornGeometry = new THREE.TorusGeometry(0.1, 0.1, 16, 100, Math.PI);
-            const leftGoatHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-            leftGoatHorn.position.set(1.6, 1.4, 0.3);
-            animal.add(leftGoatHorn);
-            const rightGoatHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-            rightGoatHorn.position.set(1.6, 1.4, -0.3);
-            animal.add(rightGoatHorn);
-            break;
-        case 3: // Devil Horn
-            hornGeometry = new THREE.ConeGeometry(0.1, 0.2, 32);
-            const leftDevilHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-            leftDevilHorn.position.set(1.6, 1.5, 0.3);
-            animal.add(leftDevilHorn);
-            const rightDevilHorn = new THREE.Mesh(hornGeometry, hornMaterial);
-            rightDevilHorn.position.set(1.6, 1.5, -0.3);
-            animal.add(rightDevilHorn);
-            break;
+        case HornType.Unicorn: {
+          hornGeometry = new THREE.ConeGeometry(0.1, 1, 32);
+          const unicornHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+          unicornHorn.position.set(1.6, 1.6, 0);
+          animal.add(unicornHorn);
+          break;
+        }
+        case HornType.Goat: {
+          hornGeometry = new THREE.TorusGeometry(0.1, 0.1, 16, 100, Math.PI);
+          const leftGoatHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+          leftGoatHorn.position.set(1.6, 1.4, 0.3);
+          animal.add(leftGoatHorn);
+          const rightGoatHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+          rightGoatHorn.position.set(1.6, 1.4, -0.3);
+          animal.add(rightGoatHorn);
+          break;
+        }
+        case HornType.Devil: {
+          hornGeometry = new THREE.ConeGeometry(0.1, 0.2, 32);
+          const leftDevilHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+          leftDevilHorn.position.set(1.6, 1.5, 0.3);
+          animal.add(leftDevilHorn);
+          const rightDevilHorn = new THREE.Mesh(hornGeometry, hornMaterial);
+          rightDevilHorn.position.set(1.6, 1.5, -0.3);
+          animal.add(rightDevilHorn);
+          break;
+        }
         default:
-            break;
-    }
+          break;
+      }      
 };
 
-const createTail = (type: number) => {
+const createTail = (type: TailLength) => {
     let tailGeometry;
     switch (type) {
-        case 1: // Short Tail
+        case TailLength.Short:
             tailGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 32);
             break;
-        case 2: // Medium Tail
+        case TailLength.Medium:
             tailGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1, 32);
             break;
-        case 3: // Long Tail
+        case TailLength.Long:
             tailGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1.5, 32);
             break;
         default:
@@ -130,17 +133,17 @@ const createTail = (type: number) => {
     return tailGeometry;
 };
 
-const createSnout = (animal: THREE.Group, type: number, color: THREE.Color) => {
+const createSnout = (animal: THREE.Group, type: SnoutType, color: THREE.Color) => {
     const snoutMaterial = new THREE.MeshStandardMaterial({ color });
     let snoutGeometry;
     switch (type) {
-        case 1: // Crocodile Snout
+        case SnoutType.Crocodile:
             snoutGeometry = new THREE.BoxGeometry(1.8, 0.4, 0.8);
             break;
-        case 2: // Dog Snout
+        case SnoutType.Dog:
             snoutGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.4, 32);
             break;
-        case 3: // Pig Snout
+        case SnoutType.Pig:
             snoutGeometry = new THREE.SphereGeometry(0.2, 32, 32);
             break;
         default:

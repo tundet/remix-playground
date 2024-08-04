@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .container {
-    @apply w-full;
+    @apply max-w-screen-xl p-4;
 }
 
 .title {
