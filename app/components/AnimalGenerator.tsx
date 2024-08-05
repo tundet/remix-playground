@@ -19,6 +19,19 @@ const AnimalGenerator: React.FC = () => {
   });
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+
+  const resizeRenderer = () => {
+    const container = containerRef.current;
+    if (container && rendererRef.current && cameraRef.current) {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      rendererRef.current.setSize(width, height);
+      cameraRef.current.aspect = width / height;
+      cameraRef.current.updateProjectionMatrix();
+    }
+  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -32,9 +45,11 @@ const AnimalGenerator: React.FC = () => {
         1000
       );
       camera.position.set(4, 3, 3);
+      cameraRef.current = camera;
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(container.clientWidth, container.clientHeight);
+      rendererRef.current = renderer;
       container.appendChild(renderer.domElement);
 
       const ambientLight = new THREE.AmbientLight(0x404040);
@@ -57,8 +72,12 @@ const AnimalGenerator: React.FC = () => {
       };
 
       animate();
+      resizeRenderer();
+      
+      window.addEventListener('resize', resizeRenderer);
 
       return () => {
+        window.removeEventListener('resize', resizeRenderer);
         container?.removeChild(renderer.domElement);
       };
     }
@@ -130,11 +149,11 @@ const AnimalGenerator: React.FC = () => {
   };
 
   return (
-    <div className="flex">
-      <div className="w-2/6 bg-gray-100 p-6 border-r border-gray-300">
-        <h3 className="text-3xl font-bold mt-0 mb-6 text-center">{t('animalGenerator.traits')}</h3>
+    <div className="flex flex-col md:flex-row h-screen md:h-auto bg-gradient-to-t from-[#eef2c0] to-[#34bab7]">
+      <div className="md:w-2/6 bg-gray-100 p-6 border-r border-gray-300">
+        <h3 className="text-lg md:text-3xl font-bold mt-0 mb-6 text-center">{t('animalGenerator.traits')}</h3>
         <div className="space-y-2">
-          <div className="block text-lg font-medium mb-2">
+          <div className="block text-sm md:text-lg font-medium mb-2">
             <input
               type="color"
               name="color"
@@ -144,7 +163,7 @@ const AnimalGenerator: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-lg font-medium mb-2">
+            <label className="block text-sm md:text-lg font-medium mb-2">
               {t('animalGenerator.horns')}:
               <select name="horns" value={traits.horns} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
                 <option value={0}>{t('animalGenerator.hornsOptions.none')}</option>
@@ -155,7 +174,7 @@ const AnimalGenerator: React.FC = () => {
             </label>
           </div>
           <div>
-            <label className="block text-lg font-medium mb-2">
+            <label className="block text-sm md:text-lg font-medium mb-2">
               {t('animalGenerator.eyes')}:
               <select name="eyes" value={traits.eyes} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
                 <option value={1}>{t('animalGenerator.eyesOptions.small')}</option>
@@ -165,7 +184,7 @@ const AnimalGenerator: React.FC = () => {
             </label>
           </div>
           <div>
-            <label className="block text-lg font-medium mb-2">
+            <label className="block text-sm md:text-lg font-medium mb-2">
               {t('animalGenerator.legs')}:
               <select name="legs" value={traits.legs} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
                 <option value={1}>{t('animalGenerator.legsOptions.short')}</option>
@@ -175,17 +194,17 @@ const AnimalGenerator: React.FC = () => {
             </label>
           </div>
           <div>
-            <label className="block text-lg font-medium mb-2">
+            <label className="block text-sm md:text-lg font-medium mb-2">
               {t('animalGenerator.tail')}:
               <select name="tail" value={traits.tail} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
-                <option value={1}>{t('animalGenerator.legsOptions.short')}</option>
-                <option value={2}>{t('animalGenerator.legsOptions.medium')}</option>
-                <option value={3}>{t('animalGenerator.legsOptions.long')}</option>
+                <option value={1}>{t('animalGenerator.tailOptions.short')}</option>
+                <option value={2}>{t('animalGenerator.tailOptions.medium')}</option>
+                <option value={3}>{t('animalGenerator.tailOptions.long')}</option>
               </select>
             </label>
           </div>
           <div>
-            <label className="block text-lg font-medium mb-2">
+            <label className="block text-sm md:text-lg font-medium mb-2">
               {t('animalGenerator.snout')}:
               <select name="snout" value={traits.snout} onChange={handleChange} className="block mt-2 w-full border border-gray-300 rounded-md p-2">
                 <option value={0}>{t('animalGenerator.snoutOptions.default')}</option>
@@ -196,7 +215,7 @@ const AnimalGenerator: React.FC = () => {
             </label>
           </div>
           <div>
-            <label className="flex mt-5 items-center text-lg font-medium mb-2">
+            <label className="flex mt-5 items-center text-sm md:text-lg font-medium mb-2">
               <input
                 type="checkbox"
                 name="wings"
@@ -214,14 +233,13 @@ const AnimalGenerator: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="w-4/6 p-6 bg-gray-200 flex items-center justify-center border-l border-gray-300">
-        <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: 'url(/images/3407002.jpg)' }} ref={containerRef} />
-        <div className="absolute bottom-4 right-4 text-sm text-gray-500">
+      <div className="relative flex-1 p-6 bg-gray-200 flex items-center justify-center border-l border-gray-300">
+        <div className="relative w-full h-64 md:h-full bg-cover bg-center" style={{ backgroundImage: 'url(/images/3407002.jpg)' }} ref={containerRef} />
+        <div className="absolute bottom-1 right-4 text-sm text-gray-500 py-0">
           Background designed by <a href="https://www.freepik.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">Freepik</a>
         </div>
       </div>
     </div>
-
   );
 };
 

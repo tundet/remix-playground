@@ -25,6 +25,11 @@
       "medium": "Medium",
       "long": "Long"
     },
+    "tailOptions": {
+      "short": "Short",
+      "medium": "Medium",
+      "long": "Long"
+    },
     "snoutOptions": {
       "default": "Default",
       "crocodile": "Crocodile",

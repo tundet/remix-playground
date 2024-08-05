@@ -39,7 +39,7 @@ export function createAnimal(scene: THREE.Scene, traits: AnimalTraits): THREE.Gr
     createSnout(animal, snout, animalColor);
 
     // Legs
-    const legSizes = [0.5, 1, 1.5];
+    const legSizes = [0.5, 1, 2];
     const legSize = legSizes[legs - 1] || 1;
     const legGeometry = new THREE.BoxGeometry(0.3, legSize, 0.3);
     const legMaterial = new THREE.MeshStandardMaterial({ color: animalColor });
@@ -54,26 +54,24 @@ export function createAnimal(scene: THREE.Scene, traits: AnimalTraits): THREE.Gr
 
     // Wings
     if (wings) {
-        const wingGeometry = new THREE.PlaneGeometry(1.5, 0.5);
+        const wingGeometry = new THREE.BoxGeometry(1.5, 0.5, 0.1);
         const wingMaterial = new THREE.MeshStandardMaterial({ color: animalColor });
 
         for (let i = 0; i < 2; i++) {
             const wing = new THREE.Mesh(wingGeometry, wingMaterial);
-            wing.position.set(0, 1, i % 2 === 0 ? 0.8 : -0.8);
+            wing.position.set(0, 1, i % 2 === 0 ? 0.55 : -0.55);
             wing.rotation.z = Math.PI / 4;
             animal.add(wing);
         }
     }
 
     // Tail
-    if (tail > 0) {
-        const tailGeometry = createTail(tail);
-        const tailMaterial = new THREE.MeshStandardMaterial({ color: animalColor });
-        const tailMesh = new THREE.Mesh(tailGeometry, tailMaterial);
-        tailMesh.position.set(-1, 0.5, 0);
-        tailMesh.rotation.z = Math.PI / 4;
-        animal.add(tailMesh);
-    }
+    const tailGeometry = createTail(tail);
+    const tailMaterial = new THREE.MeshStandardMaterial({ color: animalColor });
+    const tailMesh = new THREE.Mesh(tailGeometry, tailMaterial);
+    tailMesh.position.set(-1, 0.5, 0);
+    tailMesh.rotation.z = Math.PI / 4;
+    animal.add(tailMesh);
 
     scene.add(animal);
     return animal;
@@ -118,6 +116,7 @@ const createHorns = (animal: THREE.Group, type: HornType, color: THREE.Color) =>
 const createTail = (type: TailLength) => {
     let tailGeometry;
     switch (type) {
+        default:
         case TailLength.Short:
             tailGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 32);
             break;
@@ -125,10 +124,8 @@ const createTail = (type: TailLength) => {
             tailGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1, 32);
             break;
         case TailLength.Long:
-            tailGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1.5, 32);
+            tailGeometry = new THREE.CylinderGeometry(0.1, 0.1, 2, 32);
             break;
-        default:
-            tailGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1, 32);
     }
     return tailGeometry;
 };

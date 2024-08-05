@@ -25,6 +25,11 @@
       "medium": "Keskipitkät",
       "long": "Pitkät"
     },
+    "tailOptions": {
+      "short": "Lyhyt",
+      "medium": "Keskipitkä",
+      "long": "Pitkä"
+    },
     "snoutOptions": {
       "default": "Perus",
       "crocodile": "Krokotiili",
