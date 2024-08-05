@@ -5,6 +5,10 @@ import { LoaderFunction, json } from "@remix-run/node";
 import { PostCollectionData } from "~/types/Post";
 import NavBar from "~/components/NavBar";
 import { getSession } from "~/auth.server";
+import { motion } from "framer-motion";
+import Spinner from "~/components/Spinner";
+import { useEffect, useState } from "react";
+
 
 export const meta: MetaFunction = () => {
     return [{ title: "Post list" }];
@@ -45,6 +49,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 function PostList() {
     const { postCollection: { items }, locale } = useLoaderData<PostCollectionData>();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (items) {
+            setIsLoading(false);
+        }
+    }, [items]);
 
     return (
         <div>
@@ -53,9 +64,37 @@ function PostList() {
                 <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-12">
                     Post List
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {isLoading && (<Spinner />)}
+
+                <motion.div
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                        hidden: {
+                            opacity: 0,
+                            scale: 0.8
+                        },
+                        visible: {
+                            opacity: 1,
+                            scale: 1,
+                            transition: {
+                                delay: 0.3,
+                                when: "beforeChildren",
+                                staggerChildren: 0.2
+                            }
+                        }
+                    }}
+                >
                     {items.map((item) => (
-                        <div key={item.sys.id} className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                        <motion.div
+                            key={item.sys.id}
+                            variants={{
+                                hidden: { opacity: 0, y: 50 },
+                                visible: { opacity: 1, y: 0 }
+                            }}
+                            className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+                        >
                             <div className="relative">
                                 <img
                                     src={item.thumbnail?.url}
@@ -72,9 +111,9 @@ function PostList() {
                                     Read more
                                 </NavLink>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </main>
         </div>
     );

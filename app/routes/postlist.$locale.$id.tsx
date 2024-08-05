@@ -8,6 +8,8 @@ import DOMPurify from "isomorphic-dompurify";
 import { PostData, Post } from "~/types/Post";
 import ModelViewer from "~/components/ModelViewer";
 import NavBar from '~/components/NavBar';
+import { useEffect, useState } from "react";
+import Spinner from "~/components/Spinner";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     const { post } = data as PostData;
@@ -44,6 +46,13 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 function PostDetails() {
     const { post: { title, content, glb }, locale } = useLoaderData<PostData>();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (glb) {
+            setIsLoading(false);
+        }
+    }, [glb]);
 
     const contentText = documentToHtmlString(content.json);
     const sanitizedContentText = DOMPurify.sanitize(contentText);
@@ -74,11 +83,10 @@ function PostDetails() {
                         </div>
                     )}
                 </div>
-                {glb && (
-                    <div className="w-full lg:w-1/3 mt-8 lg:mt-0 p-4 border border-gray-200 shadow-md rounded-lg bg-white">
-                        <ModelViewer modelUrl={glb.url} />
-                    </div>
-                )}
+                <div className="w-full lg:w-1/3 mt-8 lg:mt-0 p-4 border border-gray-200 shadow-md rounded-lg bg-white">
+                    {isLoading && <Spinner />}
+                    {glb && <ModelViewer modelUrl={glb.url} />}
+                </div>
             </main>
         </div>
     );
