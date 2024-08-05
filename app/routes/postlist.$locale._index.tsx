@@ -1,15 +1,22 @@
-import { NavLink, MetaFunction, useLoaderData } from "@remix-run/react";
+import { NavLink, MetaFunction, useLoaderData, redirect } from "@remix-run/react";
 import { gql } from "@apollo/client/index.js";
 import { apolloClient } from "apollo/apolloClient";
 import { LoaderFunction, json } from "@remix-run/node";
 import { PostCollectionData } from "~/types/Post";
 import NavBar from "~/components/NavBar";
+import { getSession } from "~/auth.server";
 
 export const meta: MetaFunction = () => {
     return [{ title: "Post list" }];
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
+    const session = await getSession(request.headers.get('Cookie'));
+
+    if (!session.has('user')) {
+        return redirect('/auth/login');
+    }
+
     try {
         const { data } = await apolloClient.query<PostCollectionData>({
             query: gql`
@@ -29,7 +36,6 @@ export const loader: LoaderFunction = async ({ params }) => {
         `,
             variables: { language: params.locale },
         });
-        console.log(data);
         return json({ postCollection: data.postCollection, locale: params.locale });
     } catch (e) {
         console.log(e);

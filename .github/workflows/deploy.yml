@@ -11,6 +11,12 @@ jobs:
     env:
       VITE_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       VITE_CONTENT_URL: ${{ secrets.CONTENT_URL }}
+      VITE_NODE_ENV: ${{ secrets.NODE_ENV }}
+      VITE_AUTH_ISSUER: ${{ secrets.AUTH_ISSUER }}
+      VITE_AUTH_REDIRECT_URI: ${{ secrets.AUTH_REDIRECT_URI }}
+      VITE_AUTH_ID: ${{ secrets.AUTH_ID }}
+      VITE_AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      VITE_AUTH_SESSION_SECRET: ${{ secrets.AUTH_SESSION_SECRET }}
 
     steps:
       - name: Checkout code

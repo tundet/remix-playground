@@ -57,11 +57,11 @@ const NavBar: React.FC<NavBarProps> = ({ locale = "en-US" }) => {
               <Link to={`/postlist/${locale}`} className="text-gray-300 hover:text-white transition-colors">
                 Posts
               </Link>
-              <Link to={`/about`} className="text-gray-300 hover:text-white transition-colors">
-                About
-              </Link>
               <Link to={`/generate-animal/${locale}`} className="text-gray-300 hover:text-white transition-colors">
                 Generate Animal
+              </Link>
+              <Link to={`/auth/logout`} className="text-gray-300 hover:text-white transition-colors">
+                Logout
               </Link>
               <div className="flex flex-col mt-4">
                 {locale !== 'en-US' && (

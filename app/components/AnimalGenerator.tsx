@@ -149,8 +149,8 @@ const AnimalGenerator: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen md:h-auto bg-gradient-to-t from-[#eef2c0] to-[#34bab7]">
-      <div className="md:w-2/6 bg-gray-100 p-6 border-r border-gray-300">
+    <div className="flex flex-col md:flex-row h-screen md:h-auto">
+      <div className="md:w-2/6 p-6 bg-white md:rounded-l-lg shadow-lg">
         <h3 className="text-lg md:text-3xl font-bold mt-0 mb-6 text-center">{t('animalGenerator.traits')}</h3>
         <div className="space-y-2">
           <div className="block text-sm md:text-lg font-medium mb-2">
@@ -233,8 +233,8 @@ const AnimalGenerator: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="relative flex-1 p-6 bg-gray-200 flex items-center justify-center border-l border-gray-300">
-        <div className="relative w-full h-64 md:h-full bg-cover bg-center" style={{ backgroundImage: 'url(/images/3407002.jpg)' }} ref={containerRef} />
+      <div className="relative flex-1">
+        <div className="relative w-full h-64 md:h-full bg-cover bg-center md:rounded-r-lg" style={{ backgroundImage: 'url(/images/3407002.jpg)' }} ref={containerRef} />
         <div className="absolute bottom-1 right-4 text-sm text-gray-500 py-0">
           Background designed by <a href="https://www.freepik.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">Freepik</a>
         </div>
