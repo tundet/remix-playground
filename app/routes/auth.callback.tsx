@@ -5,12 +5,13 @@ export const loader = async ({ request }: { request: Request }) => {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   const client = getClient();
+  const redirectUri = import.meta.env.VITE_AUTH_REDIRECT_URI;
 
   if (!code) {
     return redirect('/');
   }
 
-  const tokenSet = await client.callback('http://localhost:5173/auth/callback', { code });
+  const tokenSet = await client.callback(redirectUri, { code });
   const session = await getSession(request.headers.get('Cookie'));
 
   session.set('user', tokenSet.claims());
