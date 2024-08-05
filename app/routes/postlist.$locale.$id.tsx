@@ -1,6 +1,5 @@
-
 import { LoaderFunction, json } from "@remix-run/node";
-import { MetaFunction, useLoaderData } from "@remix-run/react";
+import { MetaFunction, redirect, useLoaderData } from "@remix-run/react";
 import { gql } from "@apollo/client/index.js";
 import { apolloClient } from "apollo/apolloClient";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
@@ -10,13 +9,21 @@ import ModelViewer from "~/components/ModelViewer";
 import NavBar from '~/components/NavBar';
 import { useEffect, useState } from "react";
 import Spinner from "~/components/Spinner";
+import { motion } from 'framer-motion';
+import { getSession } from "~/auth.server";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     const { post } = data as PostData;
     return [{ title: post.title }];
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
+    const session = await getSession(request.headers.get('Cookie'));
+
+    if (!session.has('user')) {
+        return redirect('/');
+    }
+    
     try {
         const { data } = await apolloClient.query<{ post: Post }>({
             query: gql`
@@ -57,18 +64,25 @@ function PostDetails() {
     const contentText = documentToHtmlString(content.json);
     const sanitizedContentText = DOMPurify.sanitize(contentText);
 
-
     return (
         <div>
             <NavBar locale={locale} />
             <main className="container mx-auto px-8 py-8 lg:py-12 flex flex-col lg:flex-row lg:space-x-8 border border-gray-200 shadow-lg rounded-lg bg-white">
                 <div className="flex-1 space-y-8">
-                    <h1 className="title text-4xl font-extrabold mb-6 text-gray-900 border-b border-gray-300 pb-4">
+                    <motion.h1 
+                        className="title text-4xl font-extrabold mb-6 text-gray-900 border-b border-gray-300 pb-4"
+                        initial={{ opacity: 0, y: -50 }} 
+                        animate={{ opacity: 1, y: 0 }} 
+                        transition={{ duration: 0.6 }}
+                    >
                         {title}
-                    </h1>
-                    <div
+                    </motion.h1>
+                    <motion.div
                         className="content text-gray-700"
                         dangerouslySetInnerHTML={{ __html: sanitizedContentText }}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
                     />
                     {glb && (
                         <div className="mt-8 p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50">
@@ -84,8 +98,25 @@ function PostDetails() {
                     )}
                 </div>
                 <div className="w-full lg:w-1/3 mt-8 lg:mt-0 p-4 border border-gray-200 shadow-md rounded-lg bg-white">
-                    {isLoading && <Spinner />}
-                    {glb && <ModelViewer modelUrl={glb.url} />}
+                    {isLoading && (
+                        <motion.div 
+                            className="flex items-center justify-center h-full"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <Spinner />
+                        </motion.div>
+                    )}
+                    {glb && (
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9 }} 
+                            animate={{ opacity: 1, scale: 1 }} 
+                            transition={{ duration: 0.6 }}
+                        >
+                            <ModelViewer modelUrl={glb.url} />
+                        </motion.div>
+                    )}
                 </div>
             </main>
         </div>
