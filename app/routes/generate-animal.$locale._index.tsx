@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import AnimalGenerator from "../components/AnimalGenerator";
 import NavBar from "../components/NavBar";
 import { useEffect } from 'react';
-import { t } from 'i18next';
 
 export const meta: MetaFunction = () => {
   return [{ title: "Random Animal Generator" }];

@@ -1,5 +1,5 @@
 import { createCookieSessionStorage } from '@remix-run/node';
-import { Issuer, Strategy } from 'openid-client';
+import { Issuer } from 'openid-client';
 
 const authIssuer = import.meta.env.VITE_AUTH_ISSUER;
 const client_id = import.meta.env.VITE_AUTH_ID;
