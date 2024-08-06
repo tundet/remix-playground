@@ -9,11 +9,9 @@ import { motion } from "framer-motion";
 import Spinner from "~/components/Spinner";
 import { useEffect, useState } from "react";
 
-
 export const meta: MetaFunction = () => {
     return [{ title: "Post list" }];
 };
-
 export const loader: LoaderFunction = async ({ request, params }) => {
     const session = await getSession(request.headers.get('Cookie'));
 
@@ -24,25 +22,21 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     try {
         const { data } = await apolloClient.query<PostCollectionData>({
             query: gql`
-          query postCollectionQuery($language: String!) {
-            postCollection(locale: $language) {
-              items {
-                sys {
-                  id
+                query postCollectionQuery($language: String!) {
+                    postCollection(locale: $language) {
+                        items {
+                            sys { id }
+                            title
+                            thumbnail { url }
+                        }
+                    }
                 }
-                title
-                thumbnail {
-                    url
-                }
-              }
-            }
-          }
-        `,
+            `,
             variables: { language: params.locale },
         });
         return json({ postCollection: data.postCollection, locale: params.locale });
-    } catch (e) {
-        console.log(e);
+    } catch (error) {
+        console.error("Error fetching post collection:", error);
         return json({ error: "An error occurred" });
     }
 };
@@ -61,29 +55,24 @@ function PostList() {
         <div>
             <NavBar locale={locale} />
             <main className="container mx-auto px-4">
-                <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-12">
-                    Post List
-                </h2>
-                {isLoading && (<Spinner />)}
-
+                <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-12">Post List</h2>
+                {isLoading && <Spinner />}
+                
                 <motion.div
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
                     initial="hidden"
                     animate="visible"
                     variants={{
-                        hidden: {
-                            opacity: 0,
-                            scale: 0.8
-                        },
+                        hidden: { opacity: 0, scale: 0.8 },
                         visible: {
                             opacity: 1,
                             scale: 1,
                             transition: {
                                 delay: 0.3,
                                 when: "beforeChildren",
-                                staggerChildren: 0.2
-                            }
-                        }
+                                staggerChildren: 0.2,
+                            },
+                        },
                     }}
                 >
                     {items.map((item) => (
@@ -91,7 +80,7 @@ function PostList() {
                             key={item.sys.id}
                             variants={{
                                 hidden: { opacity: 0, y: 50 },
-                                visible: { opacity: 1, y: 0 }
+                                visible: { opacity: 1, y: 0 },
                             }}
                             className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
                         >
@@ -117,7 +106,6 @@ function PostList() {
             </main>
         </div>
     );
-
 }
 
 export default PostList;
