@@ -100,7 +100,9 @@ function PostDetails() {
                 </div>
                 <div className="w-full lg:w-1/3 mt-8 lg:mt-0 p-4 border border-gray-200 shadow-md rounded-lg bg-white">
                     {isLoading && (
-                        <Spinner />
+                        <div className="flex justify-center items-center">
+                            <Spinner />
+                        </div>
                     )}
                     {glb && (
                         <motion.div

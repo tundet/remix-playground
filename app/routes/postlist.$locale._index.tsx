@@ -56,8 +56,12 @@ function PostList() {
             <NavBar locale={locale} />
             <main className="container mx-auto px-4">
                 <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-12">Post List</h2>
-                {isLoading && <Spinner />}
-                
+                {isLoading &&
+                    <div className="flex justify-center items-center">
+                        <Spinner />
+                    </div>
+                }
+
                 <motion.div
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
                     initial="hidden"
